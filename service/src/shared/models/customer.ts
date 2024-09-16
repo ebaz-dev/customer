@@ -10,6 +10,7 @@ interface CustomerDoc extends Document {
   address: string;
   phone: string;
   email: string;
+  logo: string;
 }
 
 const customerSchema = new Schema<CustomerDoc>(
@@ -47,8 +48,10 @@ const customerSchema = new Schema<CustomerDoc>(
       type: String,
       required: false,
     },
+    logo: String,
   },
   {
+    timestamps: true,
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id;
@@ -63,4 +66,4 @@ customerSchema.plugin(updateIfCurrentPlugin);
 
 const Customer = model<CustomerDoc>("Customer", customerSchema);
 
-export { Customer };
+export { CustomerDoc, Customer };
