@@ -1,9 +1,13 @@
 import { Document, Schema, model } from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
+export enum CustomerType {
+  Supplier = "supplier",
+  Merchant = "merchant",
+}
 interface CustomerDoc extends Document {
   parentId: string;
-  type: string;
+  type: CustomerType;
   name: string;
   regNo: string;
   categoryId: string;
@@ -19,11 +23,7 @@ const customerSchema = new Schema<CustomerDoc>(
       type: String,
       required: false,
     },
-    type: {
-      type: String,
-      required: true,
-      enum: ["supplier", "merchant"],
-    },
+    type: { enum: Object.values(CustomerType) },
     name: {
       type: String,
       required: true,
