@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import { currentUser, requireAuth, validateRequest } from "@ebazdev/core";
 import { Customer } from "../shared/models/customer";
-import { query } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 
 const router = express.Router();
@@ -29,6 +28,10 @@ router.get("/list", validateRequest, async (req: Request, res: Response) => {
 
   if (req.query.parentId) {
     criteria.parentId = req.query.parentId;
+  }
+
+  if (req.query.type) {
+    criteria.type = req.query.type;
   }
   const customers = await Customer.find(criteria);
 

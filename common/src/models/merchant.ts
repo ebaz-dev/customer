@@ -5,7 +5,7 @@ interface MerchantDoc extends CustomerDoc {}
 
 const Merchant = Customer.discriminator<MerchantDoc>(
   "merchant",
-  new Schema({}, { discriminatorKey: "type" })
+  new Schema({})
 );
 
 export { MerchantDoc, Merchant };

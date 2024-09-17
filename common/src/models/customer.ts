@@ -23,7 +23,7 @@ const customerSchema = new Schema<CustomerDoc>(
       type: String,
       required: false,
     },
-    type: { enum: Object.values(CustomerType) },
+    type: { type: String, enum: Object.values(CustomerType), required: true },
     name: {
       type: String,
       required: true,
@@ -51,6 +51,7 @@ const customerSchema = new Schema<CustomerDoc>(
     logo: String,
   },
   {
+    discriminatorKey: "type",
     timestamps: true,
     toJSON: {
       transform(doc, ret) {

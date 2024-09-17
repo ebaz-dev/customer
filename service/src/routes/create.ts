@@ -5,7 +5,7 @@ import {
   requireAuth,
   validateRequest,
 } from "@ebazdev/core";
-import { Customer, CustomerDoc } from "../shared/models/customer";
+import { Customer, CustomerDoc, CustomerType } from "../shared/models/customer";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
@@ -35,10 +35,13 @@ router.post(
     session.startTransaction();
     try {
       let customer: any;
-      if (req.body.type === "supplier") {
-        customer = await Supplier.create(<SupplierDoc>req.body);
+      const data = req.body;
+      if (data.type === "supplier") {
+        data.type = CustomerType.Supplier;
+        customer = await Supplier.create(<SupplierDoc>data);
       } else {
-        customer = await Merchant.create(<MerchantDoc>req.body);
+        data.type = CustomerType.Merchant;
+        customer = await Merchant.create(<MerchantDoc>data);
       }
       await new CustomerCreatedPublisher(natsWrapper.client).publish(customer);
       await session.commitTransaction();
