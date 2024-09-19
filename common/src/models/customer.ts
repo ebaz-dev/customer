@@ -23,7 +23,6 @@ const customerSchema = new Schema<CustomerDoc>(
       type: String,
       required: false,
     },
-    type: { type: String, enum: Object.values(CustomerType), required: true },
     name: {
       type: String,
       required: true,
