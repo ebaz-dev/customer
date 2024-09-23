@@ -10,7 +10,7 @@ import { getRouter } from "./routes/get";
 import { listRouter } from "./routes/list";
 dotenv.config();
 
-const apiPrefix = "/api/v1/customers";
+const apiPrefix = "/api/v1/customer";
 
 const app = express();
 app.set("trust proxy", true);
