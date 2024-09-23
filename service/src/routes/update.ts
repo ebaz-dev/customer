@@ -8,7 +8,7 @@ import {
 import { Customer, CustomerDoc } from "../shared/models/customer";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { natsWrapper } from "../nats-wrapper";
 import { CustomerUpdatedPublisher } from "../events/publisher/customer-updated-publisher";
 import { Supplier } from "../shared/models/supplier";
@@ -25,12 +25,13 @@ router.post(
     body("address").notEmpty().isString().withMessage("Address is required"),
     body("phone").notEmpty().isString().withMessage("Phone is required"),
   ],
+  currentUser, requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      const customer = await Customer.findById(req.body.id);
+      const customer = await Customer.findOne({ _id: req.body.id, userId: new Types.ObjectId(req.currentUser?.id) });
       if (customer?.type === "supplier") {
         await Supplier.updateOne({ _id: req.body.id }, req.body);
       } else {

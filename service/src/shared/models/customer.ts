@@ -1,27 +1,55 @@
-import { Document, Schema, model } from "mongoose";
+import { Document, Schema, Types, model } from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 export enum CustomerType {
   Supplier = "supplier",
   Merchant = "merchant",
 }
+
+interface BankAccountDoc extends Document {
+  accountNumber: string;
+  accountName: string;
+  bankId: Types.ObjectId;
+}
+const bankAccountSchema = new Schema<BankAccountDoc>(
+  {
+    accountNumber: {
+      type: String,
+      required: true,
+    },
+    accountName: {
+      type: String,
+      required: true,
+    },
+    bankId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Bank",
+    },
+  },
+  { _id: false }
+);
+
 interface CustomerDoc extends Document {
-  parentId: string;
+  parentId: Types.ObjectId;
   type: CustomerType;
   name: string;
   regNo: string;
-  categoryId: string;
+  categoryId: Types.ObjectId;
+  userId: Types.ObjectId;
   address: string;
   phone: string;
   email: string;
   logo: string;
+  bankAccounts: BankAccountDoc[];
 }
 
 const customerSchema = new Schema<CustomerDoc>(
   {
     parentId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: false,
+      ref: "Customer",
     },
     name: {
       type: String,
@@ -32,8 +60,14 @@ const customerSchema = new Schema<CustomerDoc>(
       required: true,
     },
     categoryId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: false,
+      ref: "CustomerCategory",
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: "User",
     },
     address: {
       type: String,
@@ -48,6 +82,7 @@ const customerSchema = new Schema<CustomerDoc>(
       required: false,
     },
     logo: String,
+    bankAccounts: [bankAccountSchema],
   },
   {
     discriminatorKey: "type",

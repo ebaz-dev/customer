@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.get(
   "/get",
-  [query("id").notEmpty().isString().withMessage("ID is required")],
+  [query("id").notEmpty().isString().withMessage("ID is required")], currentUser, requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
-    const customer = await Customer.findById(req.query.id);
+    const customer = await Customer.findOne({ _id: req.query.id, userId: req.currentUser?.id });
 
     res.status(StatusCodes.OK).send(customer);
   }

@@ -28,7 +28,7 @@ router.post(
     body("regNo").notEmpty().isString().withMessage("Register is required"),
     body("address").notEmpty().isString().withMessage("Address is required"),
     body("phone").notEmpty().isString().withMessage("Phone is required"),
-  ],
+  ], currentUser, requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
@@ -36,6 +36,7 @@ router.post(
     try {
       let customer: any;
       const data = req.body;
+      data.userId = req.currentUser?.id;
       if (data.type === "supplier") {
         data.type = CustomerType.Supplier;
         customer = await Supplier.create(<SupplierDoc>data);
