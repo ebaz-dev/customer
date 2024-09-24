@@ -23,8 +23,8 @@ router.post(
       .notEmpty()
       .matches(/\b(?:supplier|merchant)\b/)
       .isString()
-      .withMessage("Name is required"),
-    body("name").notEmpty().isString().withMessage("Type is required"),
+      .withMessage("Type is required"),
+    body("name").notEmpty().isString().withMessage("Name is required"),
     body("regNo").notEmpty().isString().withMessage("Register is required"),
     body("address").notEmpty().isString().withMessage("Address is required"),
     body("phone").notEmpty().isString().withMessage("Phone is required"),

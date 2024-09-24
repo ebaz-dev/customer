@@ -6,3 +6,4 @@ export * from "./events/customer-update-event";
 export * from "./models/customer";
 export * from "./models/merchant";
 export * from "./models/supplier";
+export * from "./models/customer-category";
