@@ -71,11 +71,11 @@ const customerSchema = new Schema<CustomerDoc>(
     },
     address: {
       type: String,
-      required: true,
+      required: false,
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
     },
     email: {
       type: String,

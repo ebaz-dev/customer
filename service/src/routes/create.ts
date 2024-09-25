@@ -26,8 +26,6 @@ router.post(
       .withMessage("Type is required"),
     body("name").notEmpty().isString().withMessage("Name is required"),
     body("regNo").notEmpty().isString().withMessage("Register is required"),
-    body("address").notEmpty().isString().withMessage("Address is required"),
-    body("phone").notEmpty().isString().withMessage("Phone is required"),
   ], currentUser, requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
