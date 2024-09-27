@@ -19,7 +19,12 @@ const apiPrefix = "/api/v1/customer";
 const app = express();
 app.set("trust proxy", true);
 app.use(json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:8080", // Replace with your frontend domain
+    credentials: true, // Allow credentials (cookies, etc.)
+  })
+);
 app.use(
   cookieSession({
     signed: true,
