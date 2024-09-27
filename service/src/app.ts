@@ -11,6 +11,7 @@ import { listRouter } from "./routes/list";
 import { branchesRouter } from "./routes/branches";
 import { categoryCreateRouter } from "./routes/category-create";
 import { categoryListRouter } from "./routes/category-list";
+import cors from "cors";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -18,6 +19,7 @@ const apiPrefix = "/api/v1/customer";
 const app = express();
 app.set("trust proxy", true);
 app.use(json());
+app.use(cors());
 app.use(
   cookieSession({
     signed: true,

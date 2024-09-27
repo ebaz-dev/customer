@@ -7,3 +7,4 @@ export * from "./models/customer";
 export * from "./models/merchant";
 export * from "./models/supplier";
 export * from "./models/customer-category";
+export * from "./types/holding-supplier-codes";

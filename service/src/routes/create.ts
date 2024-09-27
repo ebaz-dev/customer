@@ -5,7 +5,7 @@ import {
   requireAuth,
   validateRequest,
 } from "@ebazdev/core";
-import { Customer, CustomerDoc, CustomerType } from "../shared/models/customer";
+import { CustomerType } from "../shared/models/customer";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
@@ -26,7 +26,9 @@ router.post(
       .withMessage("Type is required"),
     body("name").notEmpty().isString().withMessage("Name is required"),
     body("regNo").notEmpty().isString().withMessage("Register is required"),
-  ], currentUser, requireAuth,
+  ],
+  currentUser,
+  requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
