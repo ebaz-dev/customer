@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express";
 import { currentUser, requireAuth, validateRequest } from "@ebazdev/core";
-import { Customer } from "../shared/models/customer";
+import { Customer, customerRepo } from "../shared/models/customer";
 import { query } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import { Types } from "mongoose";
+import _ from "lodash";
 
 const router = express.Router();
 
@@ -35,15 +36,12 @@ router.get("/branches", currentUser, requireAuth, validateRequest, async (req: R
   if (req.query.type) {
     criteria.type = req.query.type;
   }
-  const customers = await Customer.aggregate([{ $match: criteria },
-  {
-    $lookup: {
-      from: "customers",
-      localField: "_id",
-      foreignField: "parentId",
-      as: "branches"
-    }
-  }]);
+  let parents: any = await customerRepo.select(criteria);
+  const promises = _.map(parents, async (parent: any, i) => {
+    const branches = await customerRepo.select({ parentId: parent.id });
+    return { ...parent.toJSON(), branches }
+  });
+  const customers = await Promise.all(promises);
 
   res.status(StatusCodes.OK).send({ data: customers, total: customers.length });
 });

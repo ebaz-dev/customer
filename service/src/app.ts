@@ -11,6 +11,7 @@ import { listRouter } from "./routes/list";
 import { branchesRouter } from "./routes/branches";
 import { categoryCreateRouter } from "./routes/category-create";
 import { categoryListRouter } from "./routes/category-list";
+import { categoryGetRouter } from "./routes/category-get";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -33,6 +34,7 @@ app.use(apiPrefix, listRouter);
 app.use(apiPrefix, branchesRouter);
 app.use(apiPrefix, categoryCreateRouter);
 app.use(apiPrefix, categoryListRouter);
+app.use(apiPrefix, categoryGetRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();
