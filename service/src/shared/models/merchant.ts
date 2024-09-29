@@ -1,8 +1,6 @@
 import { Schema } from "mongoose";
 import { Customer, CustomerDoc } from "./customer";
 import { BaseRepository } from "@ebazdev/core";
-
-interface MerchantDoc extends CustomerDoc { 
 import { HoldingSupplierCodes } from "../types/holding-supplier-codes";
 
 interface tradeShop {
