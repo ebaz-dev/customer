@@ -1,6 +1,6 @@
 {
   "name": "@ebazdev/customer",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "files": [
@@ -28,11 +28,12 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@ebazdev/core": "^1.0.22",
     "@types/jsonwebtoken": "^9.0.6",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.1",
-    "typescript": "^5.5.4",
-    "mongoose-update-if-current": "^1.4.0"
+    "mongoose-update-if-current": "^1.4.0",
+    "typescript": "^5.5.4"
   }
 }

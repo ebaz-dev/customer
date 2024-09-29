@@ -11,8 +11,8 @@ import { StatusCodes } from "http-status-codes";
 import mongoose, { Types } from "mongoose";
 import { natsWrapper } from "../nats-wrapper";
 import { CustomerUpdatedPublisher } from "../events/publisher/customer-updated-publisher";
-import { Supplier } from "../shared/models/supplier";
-import { Merchant } from "../shared/models/merchant";
+import { Supplier, supplierRepo } from "../shared/models/supplier";
+import { Merchant, merchantRepo } from "../shared/models/merchant";
 
 const router = express.Router();
 
@@ -21,9 +21,7 @@ router.post(
   [
     body("id").notEmpty().isString().withMessage("ID is required"),
     body("name").notEmpty().isString().withMessage("Type is required"),
-    body("regNo").notEmpty().isString().withMessage("Register is required"),
-    body("address").notEmpty().isString().withMessage("Address is required"),
-    body("phone").notEmpty().isString().withMessage("Phone is required"),
+    body("regNo").notEmpty().isString().withMessage("Register is required")
   ],
   currentUser, requireAuth,
   validateRequest,
@@ -31,11 +29,11 @@ router.post(
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      const customer = await Customer.findOne({ _id: req.body.id, userId: new Types.ObjectId(req.currentUser?.id) });
+      const customer = await Customer.findOne({ _id: req.body.id });
       if (customer?.type === "supplier") {
-        await Supplier.updateOne({ _id: req.body.id }, req.body);
+        await supplierRepo.updateOne({ condition: { _id: req.body.id }, data: req.body });
       } else {
-        await Merchant.updateOne({ _id: req.body.id }, req.body);
+        await merchantRepo.updateOne({ condition: { _id: req.body.id }, data: req.body });
       }
       await new CustomerUpdatedPublisher(natsWrapper.client).publish(
         <CustomerDoc>req.body
