@@ -12,6 +12,7 @@ import { branchesRouter } from "./routes/branches";
 import { categoryCreateRouter } from "./routes/category-create";
 import { categoryListRouter } from "./routes/category-list";
 import { categoryGetRouter } from "./routes/category-get";
+import cors from "cors";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -19,6 +20,12 @@ const apiPrefix = "/api/v1/customer";
 const app = express();
 app.set("trust proxy", true);
 app.use(json());
+app.use(
+  cors({
+    origin: "http://localhost:8080", // Replace with your frontend domain
+    credentials: true, // Allow credentials (cookies, etc.)
+  })
+);
 app.use(
   cookieSession({
     signed: true,

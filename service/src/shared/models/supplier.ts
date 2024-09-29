@@ -1,10 +1,12 @@
 import { Schema } from "mongoose";
 import { Customer, CustomerDoc } from "./customer";
 import { BaseRepository } from "@ebazdev/core";
+import { HoldingSupplierCodes } from "../types/holding-supplier-codes";
 
 interface SupplierDoc extends CustomerDoc {
   orderMin: number;
   deliveryDays: number[];
+  holdingKey?: HoldingSupplierCodes;
 }
 
 const Supplier = Customer.discriminator<SupplierDoc>(
@@ -12,6 +14,7 @@ const Supplier = Customer.discriminator<SupplierDoc>(
   new Schema({
     orderMin: Number,
     deliveryDays: { type: [Number], enum: [1, 2, 3, 4, 5, 6, 7] },
+    holdingKey: { type: String, enum: Object.values(HoldingSupplierCodes) },
   })
 );
 class SupplierRepository extends BaseRepository<SupplierDoc> {

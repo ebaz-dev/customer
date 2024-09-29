@@ -26,7 +26,9 @@ router.post(
       .withMessage("Type is required"),
     body("name").notEmpty().isString().withMessage("Name is required"),
     body("regNo").notEmpty().isString().withMessage("Register is required"),
-  ], currentUser, requireAuth,
+  ],
+  currentUser,
+  requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
