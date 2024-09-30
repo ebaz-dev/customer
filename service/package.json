@@ -44,12 +44,12 @@
     "mongoose-update-if-current": "^1.4.0",
     "node-nats-streaming": "^0.3.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "@types/lodash": "^4.17.9"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/jest": "^29.5.12",
-    "@types/lodash": "^4.17.9",
     "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
     "mongodb-memory-server": "^10.0.0",
