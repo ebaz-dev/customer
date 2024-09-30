@@ -12,6 +12,7 @@ import { branchesRouter } from "./routes/branches";
 import { categoryCreateRouter } from "./routes/category-create";
 import { categoryListRouter } from "./routes/category-list";
 import { categoryGetRouter } from "./routes/category-get";
+import { healthRouter } from "./routes/health";
 import cors from "cors";
 import { supplierCodeSaveRouter } from "./routes/supplier-code-save";
 dotenv.config();
@@ -44,6 +45,7 @@ app.use(apiPrefix, categoryCreateRouter);
 app.use(apiPrefix, categoryListRouter);
 app.use(apiPrefix, categoryGetRouter);
 app.use(apiPrefix, supplierCodeSaveRouter);
+app.use(apiPrefix, healthRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();
