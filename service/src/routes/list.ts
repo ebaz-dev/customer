@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes";
 const router = express.Router();
 
 router.get("/list", currentUser, requireAuth, validateRequest, async (req: Request, res: Response) => {
+  console.log("customer/list", req.query);
   const criteria: any = {};
   if (req.query.name) {
     criteria.name = {

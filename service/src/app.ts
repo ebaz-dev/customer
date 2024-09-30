@@ -13,6 +13,7 @@ import { categoryCreateRouter } from "./routes/category-create";
 import { categoryListRouter } from "./routes/category-list";
 import { categoryGetRouter } from "./routes/category-get";
 import cors from "cors";
+import { supplierCodeSaveRouter } from "./routes/supplier-code-save";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -42,6 +43,7 @@ app.use(apiPrefix, branchesRouter);
 app.use(apiPrefix, categoryCreateRouter);
 app.use(apiPrefix, categoryListRouter);
 app.use(apiPrefix, categoryGetRouter);
+app.use(apiPrefix, supplierCodeSaveRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();
