@@ -32,17 +32,20 @@ const bankAccountSchema = new Schema<BankAccountDoc>(
 );
 
 interface CustomerDoc extends Document {
-  parentId: Types.ObjectId;
+  parentId?: Types.ObjectId;
   type: CustomerType;
   name: string;
-  regNo: string;
-  categoryId: Types.ObjectId;
-  userId: Types.ObjectId;
-  address: string;
-  phone: string;
-  email: string;
-  logo: string;
-  bankAccounts: BankAccountDoc[];
+  regNo?: string;
+  categoryId?: Types.ObjectId;
+  userId?: Types.ObjectId;
+  address?: string;
+  phone?: string;
+  email?: string;
+  logo?: string;
+  bankAccounts?: BankAccountDoc[];
+  cityId?: number;
+  districtId?: number;
+  subDistrictId?: number;
 }
 
 const customerSchema = new Schema<CustomerDoc>(
@@ -58,7 +61,7 @@ const customerSchema = new Schema<CustomerDoc>(
     },
     regNo: {
       type: String,
-      required: true,
+      required: false,
     },
     categoryId: {
       type: Schema.Types.ObjectId,
@@ -82,8 +85,11 @@ const customerSchema = new Schema<CustomerDoc>(
       type: String,
       required: false,
     },
-    logo: String,
+    logo: { type: String, required: false },
     bankAccounts: [bankAccountSchema],
+    cityId: { type: Number, required: false },
+    districtId: { type: Number, required: false },
+    subDistrictId: { type: Number, required: false }
   },
   {
     discriminatorKey: "type",

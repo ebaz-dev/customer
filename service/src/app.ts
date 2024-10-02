@@ -15,6 +15,9 @@ import { categoryGetRouter } from "./routes/category-get";
 import { healthRouter } from "./routes/health";
 import cors from "cors";
 import { supplierCodeSaveRouter } from "./routes/supplier-code-save";
+import { locCreateRouter } from "./routes/location-create";
+import { locationListRouter } from "./routes/location-list";
+import { merchantCreateRouter } from "./routes/merchant-create";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -45,7 +48,10 @@ app.use(apiPrefix, categoryCreateRouter);
 app.use(apiPrefix, categoryListRouter);
 app.use(apiPrefix, categoryGetRouter);
 app.use(apiPrefix, supplierCodeSaveRouter);
+app.use(apiPrefix, locCreateRouter);
+app.use(apiPrefix, locationListRouter);
 app.use(apiPrefix, healthRouter);
+app.use(apiPrefix, merchantCreateRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();

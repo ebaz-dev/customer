@@ -25,7 +25,6 @@ router.post(
       .isString()
       .withMessage("Type is required"),
     body("name").notEmpty().isString().withMessage("Name is required"),
-    body("regNo").notEmpty().isString().withMessage("Register is required"),
   ],
   currentUser,
   requireAuth,
