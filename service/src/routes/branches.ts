@@ -36,9 +36,9 @@ router.get("/branches", currentUser, requireAuth, validateRequest, async (req: R
   if (req.query.type) {
     criteria.type = req.query.type;
   }
-  let parents: any = await customerRepo.select(criteria);
-  const promises = _.map(parents, async (parent: any, i) => {
-    const branches = await customerRepo.select({ parentId: parent.id });
+  const parents: any = await Customer.find(criteria);
+  const promises = _.map(parents, async (parent) => {
+    const branches = await Customer.find({ parentId: parent.id });
     return { ...parent.toJSON(), branches }
   });
   const customers = await Promise.all(promises);
