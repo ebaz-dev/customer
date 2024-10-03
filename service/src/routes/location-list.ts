@@ -11,9 +11,9 @@ router.get("/location/list", validateRequest, async (req: Request, res: Response
     const cities: any = data.filter(location => { return location.parentId === 0 }).map((city: any) => {
         const districts: any = data.filter(district => { return Number(district.parentId) === Number(city.id) }).map((district: any) => {
             const subDistricts = data.filter(subDistrict => { return Number(subDistrict.parentId) === Number(district.id) })
-            return { id: district.id, parentId: district.parentId, name: district.name, subDistricts }
+            return { id: Number(district.id), parentId: district.parentId, name: district.name, subDistricts }
         })
-        return { id: city.id, parentId: city.parentId, name: city.name, districts }
+        return { id: Number(city.id), parentId: city.parentId, name: city.name, districts }
     });
     res.status(StatusCodes.OK).send({ data: cities });
 })
