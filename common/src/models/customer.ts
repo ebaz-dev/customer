@@ -1,4 +1,3 @@
-import { BaseRepository } from "@ebazdev/core";
 import { Document, Schema, Types, model } from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
@@ -108,14 +107,6 @@ customerSchema.plugin(updateIfCurrentPlugin);
 
 const Customer = model<CustomerDoc>("Customer", customerSchema);
 
-class CustomerRepository extends BaseRepository<CustomerDoc> {
-  constructor() {
-    super();
-    this.setModel(Customer);
-  }
-}
-const customerRepo = new CustomerRepository();
-
-export { CustomerDoc, Customer, customerRepo };
+export { CustomerDoc, Customer };
 
 

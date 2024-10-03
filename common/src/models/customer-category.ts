@@ -1,7 +1,6 @@
 import { Document, Schema, Types, model } from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { CustomerType } from "./customer";
-import { BaseRepository } from "@ebazdev/core";
 
 
 interface CustomerCategoryDoc extends Document {
@@ -45,14 +44,6 @@ customerCategorySchema.plugin(updateIfCurrentPlugin);
 
 const CustomerCategory = model<CustomerCategoryDoc>("CustomerCategory", customerCategorySchema);
 
-class CustomerCategoryRepository extends BaseRepository<CustomerCategoryDoc> {
-    constructor() {
-        super();
-        this.setModel(CustomerCategory);
-    }
-}
-const customerCategoryRepo = new CustomerCategoryRepository();
-
-export { CustomerCategoryDoc, CustomerCategory, customerCategoryRepo };
+export { CustomerCategoryDoc, CustomerCategory };
 
 

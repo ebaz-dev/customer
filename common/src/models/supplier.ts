@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
 import { Customer, CustomerDoc } from "./customer";
-import { BaseRepository } from "@ebazdev/core";
 import { HoldingSupplierCodes } from "../types/holding-supplier-codes";
 
 interface SupplierDoc extends CustomerDoc {
@@ -17,13 +16,6 @@ const Supplier = Customer.discriminator<SupplierDoc>(
     holdingKey: { type: String, enum: Object.values(HoldingSupplierCodes) },
   })
 );
-class SupplierRepository extends BaseRepository<SupplierDoc> {
-  constructor() {
-    super();
-    this.setModel(Supplier);
-  }
-}
-const supplierRepo = new SupplierRepository();
 
-export { SupplierDoc, Supplier, supplierRepo };
+export { SupplierDoc, Supplier };
 

@@ -2,13 +2,14 @@ import express, { Request, Response } from "express";
 import {
     BadRequestError,
     currentUser,
+    NotFoundError,
     requireAuth,
     validateRequest,
 } from "@ebazdev/core";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import { CustomerType, merchantRepo } from "../shared";
+import { Merchant } from "../shared";
 
 const router = express.Router();
 
@@ -35,28 +36,22 @@ router.post(
         const data = req.body;
 
         try {
-            await merchantRepo.updateOne({
-                condition: {
-                    _id: data.merchantId,
-                    type: CustomerType.Merchant
-                }, data: {
-                    $pull: { tradeShops: { holdingKey: data.holdingKey } }
-                }
-            });
-            await merchantRepo.updateOne({
-                condition: {
-                    _id: data.merchantId,
-                    type: CustomerType.Merchant
-                }, data: {
-                    $push: { tradeShops: { tsId: data.tsId, holdingKey: data.holdingKey } }
-                }
-            });
+            const merchant = await Merchant.findByIdAndUpdate({
+                _id: data.merchantId
+            }, {
+                $pull: { tradeShops: { holdingKey: data.holdingKey } }
+            }).session(session);
+            if (!merchant) {
+                throw new NotFoundError();
+            }
+            merchant.tradeShops?.push({ tsId: data.tsId, holdingKey: data.holdingKey });
+            merchant.save();
             await session.commitTransaction();
-            res.status(StatusCodes.OK).send();
+            res.status(StatusCodes.OK).send({ data: merchant });
         } catch (error: any) {
             await session.abortTransaction();
-            console.error("Product add operation failed", error);
-            throw new BadRequestError("product add operation failed");
+            console.error("Update holding code operation failed", error);
+            throw new BadRequestError("Update holding code operation failed");
         } finally {
             session.endSession();
         }

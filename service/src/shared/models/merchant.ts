@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
 import { Customer, CustomerDoc } from "./customer";
-import { BaseRepository } from "@ebazdev/core";
 import { HoldingSupplierCodes } from "../types/holding-supplier-codes";
 
 interface tradeShop {
@@ -31,13 +30,5 @@ const Merchant = Customer.discriminator<MerchantDoc>(
     ],
   })
 );
-class MerchantRepository extends BaseRepository<MerchantDoc> {
-  constructor() {
-    super();
-    this.setModel(Merchant);
-  }
-}
 
-const merchantRepo = new MerchantRepository();
-
-export { MerchantDoc, Merchant, merchantRepo };
+export { MerchantDoc, Merchant };

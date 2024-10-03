@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import { currentUser, requireAuth, validateRequest } from "@ebazdev/core";
-import { Customer, customerRepo } from "../shared/models/customer";
-import { query } from "express-validator";
+import { Customer } from "../shared/models/customer";
 import { StatusCodes } from "http-status-codes";
 import { Types } from "mongoose";
 import _ from "lodash";

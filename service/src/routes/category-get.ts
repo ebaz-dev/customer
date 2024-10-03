@@ -1,10 +1,8 @@
 import express, { Request, Response } from "express";
-import { currentUser, requireAuth, validateRequest } from "@ebazdev/core";
-import { Customer } from "../shared/models/customer";
+import { validateRequest } from "@ebazdev/core";
 import { query } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import { CustomerCategory, customerCategoryRepo } from "../shared";
-import { Types } from "mongoose";
+import { CustomerCategory } from "../shared";
 
 const router = express.Router();
 
@@ -14,7 +12,7 @@ router.get(
     validateRequest,
     async (req: Request, res: Response) => {
         let data: any = {}
-        data = await customerCategoryRepo.selectOne({ _id: req.query.id });
+        data = await CustomerCategory.findById(req.query.id);
 
         res.status(StatusCodes.OK).send({ data });
     }

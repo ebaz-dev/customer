@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express";
-import { currentUser, QueryOptions, requireAuth, validateRequest } from "@ebazdev/core";
+import { currentUser, listAndCount, QueryOptions, requireAuth, validateRequest } from "@ebazdev/core";
 import { Customer } from "../shared/models/customer";
 import { StatusCodes } from "http-status-codes";
-import { selectAndCountAll } from "../utils/db-query";
 const router = express.Router();
 
 router.get("/list", currentUser, requireAuth, validateRequest, async (req: Request, res: Response) => {
@@ -42,7 +41,7 @@ router.get("/list", currentUser, requireAuth, validateRequest, async (req: Reque
   const options: QueryOptions = <QueryOptions>req.query;
   options.sortBy = "updatedAt";
   options.sortDir = -1;
-  const data = await selectAndCountAll(criteria, Customer, options);
+  const data = await listAndCount(criteria, Customer, options);
 
   res.status(StatusCodes.OK).send(data);
 })

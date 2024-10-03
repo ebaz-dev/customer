@@ -8,11 +8,11 @@ import {
 import { Customer, CustomerDoc } from "../shared/models/customer";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 import { natsWrapper } from "../nats-wrapper";
 import { CustomerUpdatedPublisher } from "../events/publisher/customer-updated-publisher";
-import { Supplier, supplierRepo } from "../shared/models/supplier";
-import { Merchant, merchantRepo } from "../shared/models/merchant";
+import { Supplier, SupplierDoc } from "../shared/models/supplier";
+import { Merchant, MerchantDoc } from "../shared/models/merchant";
 
 const router = express.Router();
 
@@ -27,13 +27,14 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
-    session.startTransaction();
     try {
-      const customer = await Customer.findOne({ _id: req.body.id });
+      session.startTransaction();
+      const customer = await Customer.findOne({ _id: req.body.id }).session(session);
+
       if (customer?.type === "supplier") {
-        await supplierRepo.updateOne({ condition: { _id: req.body.id }, data: req.body });
+        await Supplier.updateOne({ _id: req.body.id }, <SupplierDoc>req.body).session(session);
       } else {
-        await merchantRepo.updateOne({ condition: { _id: req.body.id }, data: req.body });
+        await Merchant.updateOne({ _id: req.body.id }, <MerchantDoc>req.body).session(session);
       }
       await new CustomerUpdatedPublisher(natsWrapper.client).publish(
         <CustomerDoc>req.body

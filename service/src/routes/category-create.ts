@@ -1,8 +1,6 @@
 import express, { Request, Response } from "express";
 import {
   BadRequestError,
-  currentUser,
-  requireAuth,
   validateRequest,
 } from "@ebazdev/core";
 import { body } from "express-validator";
