@@ -6,6 +6,7 @@ interface SupplierDoc extends CustomerDoc {
   orderMin: number;
   deliveryDays: number[];
   holdingKey?: HoldingSupplierCodes;
+  code: string
 }
 
 const Supplier = Customer.discriminator<SupplierDoc>(
@@ -14,6 +15,7 @@ const Supplier = Customer.discriminator<SupplierDoc>(
     orderMin: Number,
     deliveryDays: { type: [Number], enum: [1, 2, 3, 4, 5, 6, 7] },
     holdingKey: { type: String, enum: Object.values(HoldingSupplierCodes) },
+    code: String
   })
 );
 
