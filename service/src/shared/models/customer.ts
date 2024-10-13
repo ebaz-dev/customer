@@ -42,9 +42,9 @@ interface CustomerDoc extends Document {
   email?: string;
   logo?: string;
   bankAccounts?: BankAccountDoc[];
-  cityId?: number;
-  districtId?: number;
-  subDistrictId?: number;
+  cityId?: Types.ObjectId;
+  districtId?: Types.ObjectId;
+  subDistrictId?: Types.ObjectId;
 }
 
 const customerSchema = new Schema<CustomerDoc>(
@@ -86,9 +86,21 @@ const customerSchema = new Schema<CustomerDoc>(
     },
     logo: { type: String, required: false },
     bankAccounts: [bankAccountSchema],
-    cityId: { type: Number, required: false },
-    districtId: { type: Number, required: false },
-    subDistrictId: { type: Number, required: false }
+    cityId: {
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: "Location",
+    },
+    districtId: {
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: "Location",
+    },
+    subDistrictId: {
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: "Location",
+    },
   },
   {
     discriminatorKey: "type",
@@ -108,5 +120,3 @@ customerSchema.plugin(updateIfCurrentPlugin);
 const Customer = model<CustomerDoc>("Customer", customerSchema);
 
 export { CustomerDoc, Customer };
-
-
