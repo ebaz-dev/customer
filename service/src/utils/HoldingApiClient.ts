@@ -32,7 +32,7 @@ export class HoldingAPIClient extends BaseAPIClient {
 
   constructor() {
     super(
-      " https://merchant-verification-test-a6dba7hrezffecdw.southeastasia-01.azurewebsites.net",
+      "https://merchant-verification-test-a6dba7hrezffecdw.southeastasia-01.azurewebsites.net",
       "/api/login",
       "ebazaar",
       "/IM3l)8Vs4K5",
