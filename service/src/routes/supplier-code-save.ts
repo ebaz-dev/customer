@@ -10,6 +10,8 @@ import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import { Merchant } from "../shared";
+import { SupplierCodeAddedPublisher } from "../events/publisher/supplier-code-added-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -46,6 +48,7 @@ router.post(
             }
             merchant.tradeShops?.push({ tsId: data.tsId, holdingKey: data.holdingKey });
             merchant.save();
+            await new SupplierCodeAddedPublisher(natsWrapper.client).publish({ merchantId: data.merchantId, holdingKey: data.holdingKey, tsId: data.tsId });
             await session.commitTransaction();
             res.status(StatusCodes.OK).send({ data: merchant });
         } catch (error: any) {
