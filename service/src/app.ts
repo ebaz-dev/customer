@@ -3,7 +3,7 @@ import "express-async-errors";
 import { json } from "body-parser";
 import { createRouter } from "./routes/create";
 import { updateRouter } from "./routes/update";
-import { errorHandler, NotFoundError } from "@ebazdev/core";
+import { currentUser, errorHandler, NotFoundError } from "@ebazdev/core";
 import cookieSession from "cookie-session";
 import * as dotenv from "dotenv";
 import { getRouter } from "./routes/get";
@@ -19,6 +19,7 @@ import { locCreateRouter } from "./routes/location-create";
 import { locationListRouter } from "./routes/location-list";
 import { merchantCreateRouter } from "./routes/merchant-create";
 import { boListRouter } from "./routes/backoffice/list";
+import { merchantConfirmByHolding } from "./routes/merchant-confirm-by-holding";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -28,7 +29,7 @@ app.set("trust proxy", true);
 app.use(json());
 app.use(
   cors({
-    origin: "http://localhost:8080", // Replace with your frontend domain
+    origin: "http://localhost:8080",
     credentials: true, // Allow credentials (cookies, etc.)
   })
 );
@@ -40,6 +41,7 @@ app.use(
   })
 );
 
+app.use(currentUser);
 app.use(apiPrefix, createRouter);
 app.use(apiPrefix, updateRouter);
 app.use(apiPrefix, getRouter);
@@ -54,6 +56,7 @@ app.use(apiPrefix, locationListRouter);
 app.use(apiPrefix, healthRouter);
 app.use(apiPrefix, merchantCreateRouter);
 app.use(apiPrefix, boListRouter);
+app.use(apiPrefix, merchantConfirmByHolding);
 
 app.all("*", async () => {
   throw new NotFoundError();
