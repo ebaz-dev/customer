@@ -25,6 +25,7 @@ router.post(
       .isString()
       .withMessage("Holding key is required"),
     body("tsId").notEmpty().isString().withMessage("Tradeshop ID is required"),
+    body("regNo").notEmpty().isString().withMessage("Register is required"),
   ],
   currentUser,
   requireAuth,
@@ -47,10 +48,24 @@ router.post(
         throw new Error("Merchant not found");
       }
 
+      if (!merchant.parentId) {
+        throw new Error("Merchant does not have parent");
+      }
+
+      const parent = await Merchant.findById(merchant.parentId);
+
+      if (!parent) {
+        throw new Error("Merchant does not have parent");
+      }
+
+      if (parent.regNo != data.regNo) {
+        throw new Error("Register does not match");
+      }
+
       const customerHolding = await CustomerHolding.findOne({
         supplierId: data.supplierId,
         tradeShopId: data.tsId,
-        regNo: merchant.regNo,
+        regNo: data.regNo,
       });
 
       if (!customerHolding) {
