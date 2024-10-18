@@ -58,6 +58,7 @@ router.post(
         regNo: customerHolding.regNo,
         address: customerHolding.address,
         phone: customerHolding.phone,
+        userId: req.currentUser?.id,
         tradeShops: [
           {
             holdingKey: supplier.holdingKey,
