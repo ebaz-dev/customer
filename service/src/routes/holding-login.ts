@@ -38,28 +38,28 @@ router.post(
     try {
       const supplier = await Supplier.findById(data.supplierId);
       if (!supplier) {
-        throw new Error("Supplier Not Found");
+        throw new Error("supplier_not_found");
       }
       if (!supplier.holdingKey) {
-        throw new Error("Supplier Holding key not applied");
+        throw new Error("supplier_holding_key_not_applied");
       }
       const merchant = await Merchant.findById(data.merchantId);
       if (!merchant) {
-        throw new Error("Merchant not found");
+        throw new Error("merchant_not_found");
       }
 
       if (!merchant.parentId) {
-        throw new Error("Merchant does not have parent");
+        throw new Error("merchant_does_not_have_parent");
       }
 
       const parent = await Merchant.findById(merchant.parentId);
 
       if (!parent) {
-        throw new Error("Merchant does not have parent");
+        throw new Error("merchant_does_not_have_parent");
       }
 
       if (parent.regNo != data.regNo) {
-        throw new Error("Register does not match");
+        throw new Error("register_does_not_match");
       }
 
       const customerHolding = await CustomerHolding.findOne({
@@ -69,10 +69,10 @@ router.post(
       });
 
       if (!customerHolding) {
-        throw new Error("Holding customer not found");
+        throw new Error("holding_customer_not_found");
       }
       if (customerHolding.merchantId) {
-        throw new Error("Holding customer synced with another merchant");
+        throw new Error("holding_customer_synced_with_another_merchant");
       }
 
       if (merchant.tradeShops) {
@@ -80,7 +80,7 @@ router.post(
           (tradesShop) => tradesShop.holdingKey === supplier.holdingKey
         );
         if (foundTradeShop) {
-          throw new Error("Holding tradeshop already synced");
+          throw new Error("holding_tradeshop_already_synced");
         }
 
         merchant.tradeShops?.push({
