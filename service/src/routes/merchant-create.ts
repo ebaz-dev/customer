@@ -23,11 +23,19 @@ router.post(
       const { business: businessData, branch: branchData } = req.body;
       businessData.userId = req.currentUser?.id;
       branchData.userId = req.currentUser?.id;
-      const business = await Merchant.create(<MerchantDoc>businessData);
-      branchData.parentId = business.id;
-      const branch = await Merchant.create(<MerchantDoc>branchData);
+      const insertData = <MerchantDoc>branchData;
+      insertData.businessName = businessData.name;
+      insertData.regNo = businessData.regNo;
+      const merchant = await Merchant.create(insertData);
       await session.commitTransaction();
-      res.status(StatusCodes.CREATED).send({ data: business, branch });
+      res.status(StatusCodes.CREATED).send({
+        data: {
+          id: merchant.id,
+          name: merchant.businessName,
+          regNo: merchant.regNo,
+          branches: [merchant],
+        },
+      });
     } catch (error: any) {
       await session.abortTransaction();
       console.error("Merchant create operation failed", error);

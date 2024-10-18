@@ -22,6 +22,7 @@ import { boListRouter } from "./routes/backoffice/list";
 import { merchantConfirmByHolding } from "./routes/merchant-confirm-by-holding";
 import { customerHoldingCreateRouter } from "./routes/create-bulk-customer-holding";
 import { holdingLoginRouter } from "./routes/holding-login";
+import { holdingSigninRouter } from "./routes/merchant-holding-signin";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -61,6 +62,7 @@ app.use(apiPrefix, boListRouter);
 app.use(apiPrefix, merchantConfirmByHolding);
 app.use(apiPrefix, customerHoldingCreateRouter);
 app.use(apiPrefix, holdingLoginRouter);
+app.use(apiPrefix, holdingSigninRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();
