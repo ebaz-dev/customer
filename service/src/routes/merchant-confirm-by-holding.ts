@@ -7,7 +7,7 @@ import { HoldingSupplierCodes } from "../shared";
 
 const router = express.Router();
 
-router.get(
+router.post(
   "/merchant/holding/confirm",
   [
     body("tradeShopId")
@@ -32,17 +32,24 @@ router.get(
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
-    const { tradeShopId, register_number, holdingKey } = req.query as {
+    const { tradeShopId, register_number, holdingKey } = req.body as {
       tradeShopId: string;
       register_number: string;
       holdingKey: HoldingSupplierCodes;
     };
+    console.log(register_number);
 
-    const data = await HoldingAPIClient.getClient().getMerchantInfo(
+    const resp = await HoldingAPIClient.getClient().getMerchantInfo(
       tradeShopId,
       register_number,
       holdingKey
     );
+
+    const data = {
+      name: resp.data.customer.customer_name,
+      regNo: resp.data.customer.reg_num,
+      phone: resp.data.customer.phone_number,
+    };
 
     res.status(StatusCodes.OK).send({ data });
   }

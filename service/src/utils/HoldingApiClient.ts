@@ -1,4 +1,4 @@
-import { BaseAPIClient } from "@ebazdev/core";
+import { BaseAPIClient, loginType } from "@ebazdev/core";
 import { HoldingSupplierCodes } from "../shared";
 
 interface MerchantInfoResponse {
@@ -36,7 +36,9 @@ export class HoldingAPIClient extends BaseAPIClient {
       "/api/login",
       "ebazaar",
       "/IM3l)8Vs4K5",
-      30
+      30,
+      loginType.Basic,
+      "auth_token"
     );
   }
 
@@ -46,7 +48,7 @@ export class HoldingAPIClient extends BaseAPIClient {
     register_number: string,
     holdingKey: HoldingSupplierCodes
   ): Promise<MerchantInfoResponse> {
-    const { data } = await this.post(`${this.PATH_PREFIX}/login`, {
+    const { data } = await this.post(`${this.PATH_PREFIX}/get_profile`, {
       trade_shop_id: tradeShopId,
       reg_num: register_number,
       supplier_name: holdingKey,
