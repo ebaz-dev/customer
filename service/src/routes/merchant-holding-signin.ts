@@ -76,7 +76,6 @@ router.post(
         holdingKey: supplier.holdingKey,
         tsId: data.tsId,
       };
-      console.log("publishdata", publishData);
       await new SupplierCodeAddedPublisher(natsWrapper.client).publish(
         publishData
       );
