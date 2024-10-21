@@ -9,6 +9,8 @@ import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import { CustomerHolding, Merchant, Supplier } from "../shared";
+import { SupplierCodeAddedPublisher } from "../events/publisher/supplier-code-added-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -69,6 +71,11 @@ router.post(
 
       customerHolding.merchantId = merchant.id;
       await customerHolding.save();
+      await new SupplierCodeAddedPublisher(natsWrapper.client).publish({
+        merchantId: merchant.id,
+        holdingKey: supplier.holdingKey,
+        tsId: data.tsId,
+      });
       await session.commitTransaction();
       res.status(StatusCodes.OK).send({
         data: {
