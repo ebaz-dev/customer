@@ -71,11 +71,15 @@ router.post(
 
       customerHolding.merchantId = merchant.id;
       await customerHolding.save();
-      await new SupplierCodeAddedPublisher(natsWrapper.client).publish({
+      const publishData = {
         merchantId: merchant.id,
         holdingKey: supplier.holdingKey,
         tsId: data.tsId,
-      });
+      };
+      console.log("publishdata", publishData);
+      await new SupplierCodeAddedPublisher(natsWrapper.client).publish(
+        publishData
+      );
       await session.commitTransaction();
       res.status(StatusCodes.OK).send({
         data: {
