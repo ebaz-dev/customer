@@ -7,6 +7,7 @@ interface tradeShop {
   holdingKey: HoldingSupplierCodes;
 }
 interface MerchantDoc extends CustomerDoc {
+  businessName: string;
   businessStartDate?: Date;
   tradeShops?: tradeShop[];
 }
@@ -14,9 +15,13 @@ interface MerchantDoc extends CustomerDoc {
 const Merchant = Customer.discriminator<MerchantDoc>(
   "merchant",
   new Schema({
+    businessName: {
+      type: String,
+      required: false,
+    },
     businessStartDate: {
       type: Date,
-      required: false
+      required: false,
     },
     tradeShops: [
       {

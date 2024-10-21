@@ -20,6 +20,10 @@ import { locationListRouter } from "./routes/location-list";
 import { merchantCreateRouter } from "./routes/merchant-create";
 import { boListRouter } from "./routes/backoffice/list";
 import { merchantConfirmByHolding } from "./routes/merchant-confirm-by-holding";
+import { customerHoldingCreateRouter } from "./routes/create-bulk-customer-holding";
+import { holdingLoginRouter } from "./routes/holding-login";
+import { holdingSigninRouter } from "./routes/merchant-holding-signin";
+import { holdingListRouter } from "./routes/holding-list";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -57,6 +61,10 @@ app.use(apiPrefix, healthRouter);
 app.use(apiPrefix, merchantCreateRouter);
 app.use(apiPrefix, boListRouter);
 app.use(apiPrefix, merchantConfirmByHolding);
+app.use(apiPrefix, customerHoldingCreateRouter);
+app.use(apiPrefix, holdingLoginRouter);
+app.use(apiPrefix, holdingSigninRouter);
+app.use(apiPrefix, holdingListRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();

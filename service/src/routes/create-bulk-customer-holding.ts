@@ -1,33 +1,30 @@
 import express, { Request, Response } from "express";
 import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { StatusCodes } from "http-status-codes";
-import mongoose, { Types } from "mongoose";
-import { Location } from "../shared/models/location";
+import mongoose from "mongoose";
+import { CustomerHolding } from "../shared";
 
 const router = express.Router();
 
 router.post(
-  "/location/create",
+  "/holding/create",
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      const locations = await Location.updateMany(
-        {},
-        { $unset: { parentCode: "", code: "" } }
-      );
-
+      const data = req.body;
+      await CustomerHolding.insertMany(data);
       await session.commitTransaction();
-      res.status(StatusCodes.CREATED).send(locations);
+      res.status(StatusCodes.CREATED).send();
     } catch (error: any) {
       await session.abortTransaction();
-      console.error("Location create operation failed", error);
-      throw new BadRequestError("Location create operation failed");
+      console.error("Customer holding create operation failed", error);
+      throw new BadRequestError("Customer holding create operation failed");
     } finally {
       session.endSession();
     }
   }
 );
 
-export { router as locCreateRouter };
+export { router as customerHoldingCreateRouter };
