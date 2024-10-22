@@ -50,9 +50,9 @@ router.post(
       if (!customerHolding) {
         throw new Error("holding_customer_not_found");
       }
-      if (customerHolding.merchantId) {
-        throw new Error("holding_customer_synced_with_another_merchant");
-      }
+      // if (customerHolding.merchantId) {
+      //   throw new Error("holding_customer_synced_with_another_merchant");
+      // }
 
       const merchant = await Merchant.create({
         businessName: customerHolding.tradeShopName,
@@ -69,8 +69,8 @@ router.post(
         ],
       });
 
-      customerHolding.merchantId = merchant.id;
-      await customerHolding.save();
+      // customerHolding.merchantId = merchant.id;
+      // await customerHolding.save();
       const publishData = {
         merchantId: merchant.id,
         holdingKey: supplier.holdingKey,
