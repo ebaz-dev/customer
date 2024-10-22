@@ -29,7 +29,6 @@ const Merchant = Customer.discriminator<MerchantDoc>(
         holdingKey: {
           type: String,
           enum: Object.values(HoldingSupplierCodes),
-          unique: true,
         },
       },
     ],
