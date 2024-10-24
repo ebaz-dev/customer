@@ -43,7 +43,11 @@ router.get(
     if (req.query.type) {
       criteria.type = req.query.type;
     }
-    const parents: any = await Customer.find(criteria);
+    const parents: any = await Customer.find(criteria).select([
+      "-cityId",
+      "-districtId",
+      "-subDistrictId",
+    ]);
     const promises = _.map(parents, async (parent) => {
       const branches = await Customer.find({ parentId: parent.id });
       return {
