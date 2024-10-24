@@ -54,7 +54,14 @@ router.get(
         id: parent.id,
         name: parent.businessName,
         regNo: parent.regNo,
-        branches: branches.concat([parent]),
+        branches: branches.concat([
+          {
+            ...parent.toJSON(),
+            cityId: "1",
+            districtId: "1",
+            subDistrictId: "1",
+          },
+        ]),
       };
     });
     const customers = await Promise.all(promises);
