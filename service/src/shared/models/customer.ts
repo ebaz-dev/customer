@@ -1,9 +1,16 @@
+import { Sequence } from "@ebazdev/core";
+import moment from "moment";
 import { Document, Schema, Types, model } from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 export enum CustomerType {
   Supplier = "supplier",
   Merchant = "merchant",
+}
+
+export enum CustomerCode {
+  Supplier = "SEB",
+  Merchant = "MEB",
 }
 
 interface BankAccountDoc extends Document {
@@ -31,6 +38,7 @@ const bankAccountSchema = new Schema<BankAccountDoc>(
 );
 
 interface CustomerDoc extends Document {
+  customerNo?: string;
   parentId?: Types.ObjectId;
   type: CustomerType;
   name: string;
@@ -49,6 +57,10 @@ interface CustomerDoc extends Document {
 
 const customerSchema = new Schema<CustomerDoc>(
   {
+    customerNo: {
+      type: String,
+      required: false,
+    },
     parentId: {
       type: Schema.Types.ObjectId,
       required: false,

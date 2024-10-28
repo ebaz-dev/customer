@@ -8,9 +8,10 @@ import {
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import { CustomerHolding, Merchant, Supplier } from "../shared";
+import { CustomerCode, CustomerHolding, Merchant, Supplier } from "../shared";
 import { SupplierCodeAddedPublisher } from "../events/publisher/supplier-code-added-publisher";
 import { natsWrapper } from "../nats-wrapper";
+import { getCustomerNumber } from "../utils/customer-number-generate";
 
 const router = express.Router();
 
@@ -54,7 +55,10 @@ router.post(
       //   throw new Error("holding_customer_synced_with_another_merchant");
       // }
 
+      const customerNo = await getCustomerNumber(CustomerCode.Merchant);
+
       const merchant = await Merchant.create({
+        customerNo,
         businessName: customerHolding.tradeShopName,
         name: customerHolding.tradeShopName,
         regNo: customerHolding.regNo,
