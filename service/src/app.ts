@@ -24,6 +24,7 @@ import { customerHoldingCreateRouter } from "./routes/create-bulk-customer-holdi
 import { holdingLoginRouter } from "./routes/holding-login";
 import { holdingSigninRouter } from "./routes/merchant-holding-signin";
 import { holdingListRouter } from "./routes/holding-list";
+import { codeUpdateRouter } from "./routes/customer-code-set";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -65,6 +66,7 @@ app.use(apiPrefix, customerHoldingCreateRouter);
 app.use(apiPrefix, holdingLoginRouter);
 app.use(apiPrefix, holdingSigninRouter);
 app.use(apiPrefix, holdingListRouter);
+app.use(apiPrefix, codeUpdateRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();
