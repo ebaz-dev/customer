@@ -5,7 +5,7 @@ import {
   requireAuth,
   validateRequest,
 } from "@ebazdev/core";
-import { CustomerType } from "../shared/models/customer";
+import { CustomerCode, CustomerType } from "../shared/models/customer";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
@@ -13,6 +13,7 @@ import { natsWrapper } from "../nats-wrapper";
 import { CustomerCreatedPublisher } from "../events/publisher/customer-created-publisher";
 import { Supplier, SupplierDoc } from "../shared/models/supplier";
 import { Merchant, MerchantDoc } from "../shared/models/merchant";
+import { getCustomerNumber } from "../utils/customer-number-generate";
 
 const router = express.Router();
 
@@ -38,9 +39,11 @@ router.post(
       data.userId = req.currentUser?.id;
       if (data.type === "supplier") {
         data.type = CustomerType.Supplier;
+        data.customerNo = await getCustomerNumber(CustomerCode.Supplier);
         customer = await Supplier.create(<SupplierDoc>data);
       } else {
         data.type = CustomerType.Merchant;
+        data.customerNo = await getCustomerNumber(CustomerCode.Merchant);
         customer = await Merchant.create(<MerchantDoc>data);
       }
       await new CustomerCreatedPublisher(natsWrapper.client).publish(customer);

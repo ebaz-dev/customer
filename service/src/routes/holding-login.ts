@@ -9,7 +9,8 @@ import {
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import { CustomerHolding, Merchant, Supplier } from "../shared";
+import { CustomerCode, CustomerHolding, Merchant, Supplier } from "../shared";
+import { getCustomerNumber } from "../utils/customer-number-generate";
 
 const router = express.Router();
 
@@ -95,6 +96,7 @@ router.post(
           },
         ];
       }
+      merchant.customerNo = await getCustomerNumber(CustomerCode.Merchant);
 
       await merchant.save();
       customerHolding.merchantId = merchant.id;

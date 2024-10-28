@@ -8,6 +8,8 @@ import {
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import { Merchant, MerchantDoc } from "../shared/models/merchant";
+import { getCustomerNumber } from "../utils/customer-number-generate";
+import { CustomerCode } from "../shared";
 
 const router = express.Router();
 
@@ -26,6 +28,7 @@ router.post(
       const insertData = <MerchantDoc>branchData;
       insertData.businessName = businessData.name;
       insertData.regNo = businessData.regNo;
+      insertData.customerNo = await getCustomerNumber(CustomerCode.Merchant);
       const merchant = await Merchant.create(insertData);
       await session.commitTransaction();
       res.status(StatusCodes.CREATED).send({
