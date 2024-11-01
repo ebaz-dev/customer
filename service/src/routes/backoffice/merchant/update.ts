@@ -2,9 +2,9 @@ import express, { Request, Response } from "express";
 import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import { CustomerDoc, Merchant, MerchantDoc } from "@app/shared";
-import { CustomerUpdatedPublisher } from "@app/events/publisher/customer-updated-publisher";
-import { natsWrapper } from "@app/nats-wrapper";
+import { CustomerDoc, Merchant, MerchantDoc } from "../../../shared";
+import { CustomerUpdatedPublisher } from "../../../events/publisher/customer-updated-publisher";
+import { natsWrapper } from "../../../nats-wrapper";
 const router = express.Router();
 
 router.put(

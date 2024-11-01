@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { validateRequest } from "@ebazdev/core";
 import { StatusCodes } from "http-status-codes";
-import { Supplier } from "@app/shared";
+import { Supplier } from "../../../shared";
 
 const router = express.Router();
 

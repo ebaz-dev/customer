@@ -3,10 +3,10 @@ import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import { CustomerCode, CustomerType, Supplier, SupplierDoc } from "@app/shared";
-import { getCustomerNumber } from "@app/utils/customer-number-generate";
-import { CustomerCreatedPublisher } from "@app/events/publisher/customer-created-publisher";
-import { natsWrapper } from "@app/nats-wrapper";
+import { CustomerCode, CustomerType, Supplier, SupplierDoc } from "../../../shared";
+import { getCustomerNumber } from "../../../utils/customer-number-generate";
+import { CustomerCreatedPublisher } from "../../../events/publisher/customer-created-publisher";
+import { natsWrapper } from "../../../nats-wrapper";
 
 const router = express.Router();
 

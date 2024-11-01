@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { validateRequest } from "@ebazdev/core";
 import { StatusCodes } from "http-status-codes";
 import _ from "lodash";
-import { CustomerCategory } from "@app/shared";
+import { CustomerCategory } from "../../../shared";
 import { query } from "express-validator";
 const router = express.Router();
 
