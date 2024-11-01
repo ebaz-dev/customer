@@ -1,19 +1,11 @@
 import express, { Request, Response } from "express";
-import {
-  currentUser,
-  listAndCount,
-  QueryOptions,
-  requireAuth,
-  validateRequest,
-} from "@ebazdev/core";
+import { listAndCount, QueryOptions, validateRequest } from "@ebazdev/core";
 import { StatusCodes } from "http-status-codes";
 import { Merchant } from "@app/shared";
 const router = express.Router();
 
 router.get(
   "/merchant",
-  currentUser,
-  requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
     const filter: any = req.query.filter || {};

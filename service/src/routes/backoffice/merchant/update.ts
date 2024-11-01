@@ -1,10 +1,5 @@
 import express, { Request, Response } from "express";
-import {
-  BadRequestError,
-  currentUser,
-  requireAuth,
-  validateRequest,
-} from "@ebazdev/core";
+import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import { CustomerDoc, Merchant, MerchantDoc } from "@app/shared";
@@ -14,8 +9,6 @@ const router = express.Router();
 
 router.put(
   "/merchant/:id",
-  currentUser,
-  requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();

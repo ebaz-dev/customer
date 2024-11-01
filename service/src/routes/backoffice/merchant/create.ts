@@ -1,10 +1,5 @@
 import express, { Request, Response } from "express";
-import {
-  BadRequestError,
-  currentUser,
-  requireAuth,
-  validateRequest,
-} from "@ebazdev/core";
+import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
@@ -18,8 +13,6 @@ const router = express.Router();
 router.post(
   "/merchant",
   [body("name").notEmpty().isString().withMessage("Name is required")],
-  currentUser,
-  requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();

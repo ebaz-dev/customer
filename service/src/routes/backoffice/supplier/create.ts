@@ -1,21 +1,9 @@
 import express, { Request, Response } from "express";
-import {
-  BadRequestError,
-  currentUser,
-  requireAuth,
-  validateRequest,
-} from "@ebazdev/core";
+import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import {
-  CustomerCode,
-  CustomerType,
-  Merchant,
-  MerchantDoc,
-  Supplier,
-  SupplierDoc,
-} from "@app/shared";
+import { CustomerCode, CustomerType, Supplier, SupplierDoc } from "@app/shared";
 import { getCustomerNumber } from "@app/utils/customer-number-generate";
 import { CustomerCreatedPublisher } from "@app/events/publisher/customer-created-publisher";
 import { natsWrapper } from "@app/nats-wrapper";
@@ -25,8 +13,6 @@ const router = express.Router();
 router.post(
   "/supplier",
   [body("name").notEmpty().isString().withMessage("Name is required")],
-  currentUser,
-  requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
     const session = await mongoose.startSession();
