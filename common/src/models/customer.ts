@@ -6,6 +6,11 @@ export enum CustomerType {
   Merchant = "merchant",
 }
 
+export enum CustomerCode {
+  Supplier = "SEB",
+  Merchant = "MEB",
+}
+
 interface BankAccountDoc extends Document {
   accountNumber: string;
   accountName: string;
@@ -31,6 +36,7 @@ const bankAccountSchema = new Schema<BankAccountDoc>(
 );
 
 interface CustomerDoc extends Document {
+  customerNo?: string;
   parentId?: Types.ObjectId;
   type: CustomerType;
   name: string;
@@ -49,6 +55,10 @@ interface CustomerDoc extends Document {
 
 const customerSchema = new Schema<CustomerDoc>(
   {
+    customerNo: {
+      type: String,
+      required: false,
+    },
     parentId: {
       type: Schema.Types.ObjectId,
       required: false,
