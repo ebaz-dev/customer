@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { listAndCount, QueryOptions, validateRequest } from "@ebazdev/core";
 import { StatusCodes } from "http-status-codes";
 import { Supplier } from "../../../shared";
+import { Types } from "mongoose";
 const router = express.Router();
 
 router.get(
@@ -30,11 +31,11 @@ router.get(
     }
 
     if (filter.parentId) {
-      criteria.parentId = filter.parentId;
+      criteria.parentId = new Types.ObjectId(filter.parentId as string);
     }
 
     if (filter.userId) {
-      criteria.userId = filter.userId;
+      criteria.userId = new Types.ObjectId(filter.userId as string);
     }
 
     if (filter.type) {
