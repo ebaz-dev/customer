@@ -18,16 +18,26 @@ import { supplierCodeSaveRouter } from "./routes/supplier-code-save";
 import { locCreateRouter } from "./routes/location-create";
 import { locationListRouter } from "./routes/location-list";
 import { merchantCreateRouter } from "./routes/merchant-create";
-import { boListRouter } from "./routes/backoffice/list";
 import { merchantConfirmByHolding } from "./routes/merchant-confirm-by-holding";
 import { customerHoldingCreateRouter } from "./routes/create-bulk-customer-holding";
 import { holdingLoginRouter } from "./routes/holding-login";
 import { holdingSigninRouter } from "./routes/merchant-holding-signin";
 import { holdingListRouter } from "./routes/holding-list";
 import { codeUpdateRouter } from "./routes/customer-code-set";
+import { boMerchantCreateRouter } from "./routes/backoffice/merchant/create";
+import { boMerchantGetRouter } from "./routes/backoffice/merchant/get";
+import { boMerchantListRouter } from "./routes/backoffice/merchant/list";
+import { boMerchantUpdateRouter } from "./routes/backoffice/merchant/update";
+import { boSupplierCreateRouter } from "./routes/backoffice/supplier/create";
+import { boSupplierListRouter } from "./routes/backoffice/supplier/list";
+import { boSupplierGetRouter } from "./routes/backoffice/supplier/get";
+import { boSupplierUpdateRouter } from "./routes/backoffice/supplier/update";
+import { boCategoryListRouter } from "./routes/backoffice/category/category-list";
+import { boLocationListRouter } from "./routes/backoffice/location/location-list";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
+const backofficePrefix = "/api/v1/customer/bo";
 
 const app = express();
 app.set("trust proxy", true);
@@ -60,13 +70,24 @@ app.use(apiPrefix, locCreateRouter);
 app.use(apiPrefix, locationListRouter);
 app.use(apiPrefix, healthRouter);
 app.use(apiPrefix, merchantCreateRouter);
-app.use(apiPrefix, boListRouter);
 app.use(apiPrefix, merchantConfirmByHolding);
 app.use(apiPrefix, customerHoldingCreateRouter);
 app.use(apiPrefix, holdingLoginRouter);
 app.use(apiPrefix, holdingSigninRouter);
 app.use(apiPrefix, holdingListRouter);
 app.use(apiPrefix, codeUpdateRouter);
+
+//backoffice
+app.use(backofficePrefix, boMerchantCreateRouter);
+app.use(backofficePrefix, boMerchantGetRouter);
+app.use(backofficePrefix, boMerchantListRouter);
+app.use(backofficePrefix, boMerchantUpdateRouter);
+app.use(backofficePrefix, boSupplierCreateRouter);
+app.use(backofficePrefix, boSupplierGetRouter);
+app.use(backofficePrefix, boSupplierListRouter);
+app.use(backofficePrefix, boSupplierUpdateRouter);
+app.use(backofficePrefix, boCategoryListRouter);
+app.use(backofficePrefix, boLocationListRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();
