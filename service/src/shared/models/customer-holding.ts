@@ -3,16 +3,16 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface CustomerHoldingDoc extends Document {
   supplierId: Types.ObjectId;
-  ownerId: string;
-  ownerName: string;
-  tradeShopName: string;
-  tradeShopId: string;
-  team: string;
-  salesman: string;
-  mngr: string;
   regNo: string;
   phone: string;
-  address: string;
+  tradeShopName: string;
+  tradeShopId: string;
+  ownerId?: string;
+  ownerName?: string;
+  team?: string;
+  salesman?: string;
+  mngr?: string;
+  address?: string;
 
   merchantId?: Types.ObjectId;
 }
@@ -24,13 +24,13 @@ const customerHoldingSchema = new Schema<CustomerHoldingDoc>(
       required: true,
       ref: "Customer",
     },
-    ownerId: {
+    regNo: {
       type: String,
-      required: true,
+      required: false,
     },
-    ownerName: {
+    phone: {
       type: String,
-      required: true,
+      required: false,
     },
     tradeShopName: {
       type: String,
@@ -40,23 +40,23 @@ const customerHoldingSchema = new Schema<CustomerHoldingDoc>(
       type: String,
       required: true,
     },
-    team: {
-      type: String,
-      required: true,
-    },
-    salesman: {
-      type: String,
-      required: true,
-    },
-    mngr: {
-      type: String,
-      required: true,
-    },
-    regNo: {
+    ownerId: {
       type: String,
       required: false,
     },
-    phone: {
+    ownerName: {
+      type: String,
+      required: false,
+    },
+    team: {
+      type: String,
+      required: false,
+    },
+    salesman: {
+      type: String,
+      required: false,
+    },
+    mngr: {
       type: String,
       required: false,
     },
