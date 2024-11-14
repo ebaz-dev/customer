@@ -74,27 +74,6 @@ router.get(
     }
     aggregates.push({ $match: criteria });
 
-    if (req.query.type && req.query.type === CustomerType.Supplier) {
-      aggregates.push({
-        $lookup: {
-          from: "brands",
-          localField: "_id",
-          foreignField: "customerId",
-          pipeline: [
-            {
-              $project: {
-                id: "$_id",
-                _id: 0,
-                name: 1,
-                slug: 1,
-                image: 1,
-              },
-            },
-          ],
-          as: "brands",
-        },
-      });
-    }
     aggregates.push({
       $addFields: {
         id: "$_id",
