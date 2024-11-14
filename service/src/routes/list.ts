@@ -8,10 +8,23 @@ import {
 } from "@ebazdev/core";
 import { Customer, CustomerType } from "../shared/models/customer";
 import { StatusCodes } from "http-status-codes";
+import { query } from "express-validator";
+import mongoose, { Types } from "mongoose";
 const router = express.Router();
 
 router.get(
   "/list",
+  [
+    query("ids")
+      .optional()
+      .custom((value) => {
+        const idsArray = value.split(",").map((id: string) => id.trim());
+        return idsArray.every((id: string) =>
+          mongoose.Types.ObjectId.isValid(id)
+        );
+      })
+      .withMessage("IDs must be a comma-separated list of valid ObjectIds"),
+  ],
   currentUser,
   requireAuth,
   validateRequest,
@@ -39,7 +52,17 @@ router.get(
     }
 
     if (req.query.parentId) {
-      criteria.parentId = req.query.parentId;
+      criteria["$or"] = [
+        { _id: new Types.ObjectId(req.query.parentId as string) },
+        { parentId: new Types.ObjectId(req.query.parentId as string) },
+      ];
+    }
+
+    if (req.query.ids) {
+      const idsArray = (req.query.ids as string)
+        .split(",")
+        .map((id) => new Types.ObjectId(id.trim()));
+      criteria._id = { $in: idsArray };
     }
 
     if (req.query.userId) {
