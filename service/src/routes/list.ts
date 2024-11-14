@@ -30,7 +30,7 @@ router.get(
   validateRequest,
   async (req: Request, res: Response) => {
     console.log("customer/list", req.query);
-    const criteria: any = {};
+    const criteria: any = { parentId: { $exists: false } };
     const aggregates: any = [];
     if (req.query.name) {
       criteria.name = {
