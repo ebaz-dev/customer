@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
 import {
-  aggregateAndCount,
   currentUser,
+  listAndCount,
   QueryOptions,
   requireAuth,
   validateRequest,
 } from "@ebazdev/core";
-import { Customer, CustomerType } from "../shared/models/customer";
+import { Customer } from "../shared/models/customer";
 import { StatusCodes } from "http-status-codes";
 import { query } from "express-validator";
 import mongoose, { Types } from "mongoose";
@@ -31,7 +31,6 @@ router.get(
   async (req: Request, res: Response) => {
     console.log("customer/list", req.query);
     const criteria: any = {};
-    const aggregates: any = [];
     if (req.query.name) {
       criteria.name = {
         $regex: req.query.name,
@@ -75,20 +74,10 @@ router.get(
     if (req.query.vendorKey) {
       criteria.vendorKey = req.query.vendorKey;
     }
-    aggregates.push({ $match: criteria });
-
-    aggregates.push({
-      $addFields: {
-        id: "$_id",
-      },
-    });
-    aggregates.push({
-      $unset: "_id",
-    });
     const options: QueryOptions = <QueryOptions>req.query;
     options.sortBy = "updatedAt";
     options.sortDir = -1;
-    const data = await aggregateAndCount(Customer, options, aggregates);
+    const data = await listAndCount(criteria, Customer, options);
 
     res.status(StatusCodes.OK).send(data);
   }

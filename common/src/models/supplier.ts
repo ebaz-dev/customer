@@ -2,6 +2,7 @@ import { Schema } from "mongoose";
 import { Customer, CustomerDoc } from "./customer";
 import { HoldingSupplierCodes } from "../types/holding-supplier-codes";
 import { VendorCodes } from "../types/vendor-codes";
+import { IntegrationKeys } from "../types/integration-keys";
 
 interface BannerDoc extends Document {
   file: string;
@@ -81,6 +82,7 @@ interface SupplierDoc extends CustomerDoc {
   infoBanner?: string;
   brands: BrandDoc[];
   vendorKey?: VendorCodes;
+  integrationKey?: IntegrationKeys;
 }
 
 const Supplier = Customer.discriminator<SupplierDoc>(
@@ -96,6 +98,7 @@ const Supplier = Customer.discriminator<SupplierDoc>(
     infoBanner: { type: String, require: false },
     brands: [brandSchema],
     vendorKey: { type: String, enum: Object.values(VendorCodes) },
+    integrationKey: { type: String, enum: Object.values(IntegrationKeys) },
   })
 );
 
