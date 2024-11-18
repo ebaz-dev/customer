@@ -4,12 +4,12 @@ import { HoldingSupplierCodes } from "../types/holding-supplier-codes";
 import { VendorCodes } from "../types/vendor-codes";
 
 interface BannerDoc extends Document {
-  url: string;
+  file: string;
   type: number;
 }
 const bannerSchema = new Schema<BannerDoc>(
   {
-    url: {
+    file: {
       type: String,
       required: true,
     },
@@ -31,7 +31,7 @@ const bannerSchema = new Schema<BannerDoc>(
 interface BrandDoc extends Document {
   url: string;
 }
-const brandSchema = new Schema<BannerDoc>(
+const brandSchema = new Schema<BrandDoc>(
   {
     url: {
       type: String,
