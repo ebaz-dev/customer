@@ -30,7 +30,7 @@ router.get(
   validateRequest,
   async (req: Request, res: Response) => {
     console.log("customer/list", req.query);
-    const criteria: any = { parentId: { $exists: false } };
+    const criteria: any = {};
     const aggregates: any = [];
     if (req.query.name) {
       criteria.name = {
@@ -52,10 +52,7 @@ router.get(
     }
 
     if (req.query.parentId) {
-      criteria["$or"] = [
-        { _id: new Types.ObjectId(req.query.parentId as string) },
-        { parentId: new Types.ObjectId(req.query.parentId as string) },
-      ];
+      criteria.parentId = new Types.ObjectId(req.query.parentId as string);
     }
 
     if (req.query.ids) {
@@ -71,6 +68,12 @@ router.get(
 
     if (req.query.type) {
       criteria.type = req.query.type;
+    }
+    if (req.query.holdingKey) {
+      criteria.holdingKey = req.query.holdingKey;
+    }
+    if (req.query.vendorKey) {
+      criteria.vendorKey = req.query.vendorKey;
     }
     aggregates.push({ $match: criteria });
 
