@@ -8,6 +8,9 @@ export * from "./models/customer";
 export * from "./models/merchant";
 export * from "./models/supplier";
 export * from "./models/customer-category";
+export * from "./models/location";
 export * from "./types/holding-supplier-codes";
+export * from "./types/integration-keys";
+export * from "./types/vendor-codes";
 
 export * from "./models/customer-holding";

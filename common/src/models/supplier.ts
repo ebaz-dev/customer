@@ -1,6 +1,8 @@
 import { Schema } from "mongoose";
 import { Customer, CustomerDoc } from "./customer";
 import { HoldingSupplierCodes } from "../types/holding-supplier-codes";
+import { VendorCodes } from "../types/vendor-codes";
+import { IntegrationKeys } from "../types/integration-keys";
 
 interface BannerDoc extends Document {
   file: string;
@@ -14,6 +16,26 @@ const bannerSchema = new Schema<BannerDoc>(
     },
     type: {
       type: Number,
+      required: true,
+    },
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+      },
+    },
+  }
+);
+
+interface BrandDoc extends Document {
+  url: string;
+}
+const brandSchema = new Schema<BrandDoc>(
+  {
+    url: {
+      type: String,
       required: true,
     },
   },
@@ -58,6 +80,9 @@ interface SupplierDoc extends CustomerDoc {
   productQuery?: ProductQueryDoc;
   productBanner?: string;
   infoBanner?: string;
+  brands: BrandDoc[];
+  vendorKey?: VendorCodes;
+  integrationKey?: IntegrationKeys;
 }
 
 const Supplier = Customer.discriminator<SupplierDoc>(
@@ -71,6 +96,9 @@ const Supplier = Customer.discriminator<SupplierDoc>(
     productQuery: productQuerySchema,
     productBanner: { type: String, require: false },
     infoBanner: { type: String, require: false },
+    brands: [brandSchema],
+    vendorKey: { type: String, enum: Object.values(VendorCodes) },
+    integrationKey: { type: String, enum: Object.values(IntegrationKeys) },
   })
 );
 

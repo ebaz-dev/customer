@@ -1,8 +1,5 @@
 import express, { Request, Response } from "express";
-import {
-  BadRequestError,
-  validateRequest,
-} from "@ebazdev/core";
+import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
@@ -26,7 +23,7 @@ router.post(
     session.startTransaction();
     try {
       const data = req.body;
-      const category = await CustomerCategory.create(data);
+      const category = await CustomerCategory.create(data, { session });
       await session.commitTransaction();
       res.status(StatusCodes.CREATED).send(category);
     } catch (error: any) {

@@ -124,6 +124,33 @@ const customerSchema = new Schema<CustomerDoc>(
   }
 );
 
+customerSchema.virtual("category", {
+  ref: "CustomerCategory",
+  localField: "categoryId",
+  foreignField: "_id",
+  justOne: true,
+});
+customerSchema.virtual("city", {
+  ref: "Location",
+  localField: "cityId",
+  foreignField: "_id",
+  justOne: true,
+});
+customerSchema.virtual("district", {
+  ref: "Location",
+  localField: "districtId",
+  foreignField: "_id",
+  justOne: true,
+});
+customerSchema.virtual("subDistrict", {
+  ref: "Location",
+  localField: "subDistrictId",
+  foreignField: "_id",
+  justOne: true,
+});
+customerSchema.set("toObject", { virtuals: true });
+customerSchema.set("toJSON", { virtuals: true });
+
 customerSchema.set("versionKey", "version");
 customerSchema.plugin(updateIfCurrentPlugin);
 

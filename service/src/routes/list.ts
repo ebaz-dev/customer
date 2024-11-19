@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
 import {
-  aggregateAndCount,
   currentUser,
+  listAndCount,
   QueryOptions,
   requireAuth,
   validateRequest,
 } from "@ebazdev/core";
-import { Customer, CustomerType } from "../shared/models/customer";
+import { Customer } from "../shared/models/customer";
 import { StatusCodes } from "http-status-codes";
 import { query } from "express-validator";
 import mongoose, { Types } from "mongoose";
@@ -31,7 +31,6 @@ router.get(
   async (req: Request, res: Response) => {
     console.log("customer/list", req.query);
     const criteria: any = {};
-    const aggregates: any = [];
     if (req.query.name) {
       criteria.name = {
         $regex: req.query.name,
@@ -52,10 +51,7 @@ router.get(
     }
 
     if (req.query.parentId) {
-      criteria["$or"] = [
-        { _id: new Types.ObjectId(req.query.parentId as string) },
-        { parentId: new Types.ObjectId(req.query.parentId as string) },
-      ];
+      criteria.parentId = new Types.ObjectId(req.query.parentId as string);
     }
 
     if (req.query.ids) {
@@ -72,41 +68,16 @@ router.get(
     if (req.query.type) {
       criteria.type = req.query.type;
     }
-    aggregates.push({ $match: criteria });
-
-    if (req.query.type && req.query.type === CustomerType.Supplier) {
-      aggregates.push({
-        $lookup: {
-          from: "brands",
-          localField: "_id",
-          foreignField: "customerId",
-          pipeline: [
-            {
-              $project: {
-                id: "$_id",
-                _id: 0,
-                name: 1,
-                slug: 1,
-                image: 1,
-              },
-            },
-          ],
-          as: "brands",
-        },
-      });
+    if (req.query.holdingKey) {
+      criteria.holdingKey = req.query.holdingKey;
     }
-    aggregates.push({
-      $addFields: {
-        id: "$_id",
-      },
-    });
-    aggregates.push({
-      $unset: "_id",
-    });
+    if (req.query.vendorKey) {
+      criteria.vendorKey = req.query.vendorKey;
+    }
     const options: QueryOptions = <QueryOptions>req.query;
     options.sortBy = "updatedAt";
     options.sortDir = -1;
-    const data = await aggregateAndCount(Customer, options, aggregates);
+    const data = await listAndCount(criteria, Customer, options);
 
     res.status(StatusCodes.OK).send(data);
   }
