@@ -8,7 +8,13 @@ import {
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import { CustomerCode, CustomerHolding, Merchant, Supplier } from "../shared";
+import {
+  CustomerCode,
+  CustomerHolding,
+  HoldingSupplierCodes,
+  Merchant,
+  Supplier,
+} from "../shared";
 import { SupplierCodeAddedPublisher } from "../events/publisher/supplier-code-added-publisher";
 import { natsWrapper } from "../nats-wrapper";
 import { getCustomerNumber } from "../utils/customer-number-generate";
@@ -57,6 +63,25 @@ router.post(
 
       const customerNo = await getCustomerNumber(CustomerCode.Merchant);
 
+      const tradeShops = [
+        {
+          holdingKey: supplier.holdingKey,
+          tsId: customerHolding.tradeShopId,
+        },
+      ];
+
+      if (supplier.holdingKey === HoldingSupplierCodes.TotalDistribution) {
+        tradeShops.push({
+          holdingKey: HoldingSupplierCodes.CocaCola,
+          tsId: customerHolding.tradeShopId,
+        });
+
+        tradeShops.push({
+          holdingKey: HoldingSupplierCodes.AnunGoo,
+          tsId: customerHolding.tradeShopId,
+        });
+      }
+
       const merchant = await Merchant.create({
         customerNo,
         businessName: customerHolding.tradeShopName,
@@ -65,12 +90,7 @@ router.post(
         address: customerHolding.address,
         phone: customerHolding.phone,
         userId: req.currentUser?.id,
-        tradeShops: [
-          {
-            holdingKey: supplier.holdingKey,
-            tsId: customerHolding.tradeShopId,
-          },
-        ],
+        tradeShops,
       });
 
       // customerHolding.merchantId = merchant.id;

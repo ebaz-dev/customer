@@ -79,15 +79,15 @@ app.use(apiPrefix, codeUpdateRouter);
 
 //backoffice
 app.use(backofficePrefix, boMerchantCreateRouter);
-app.use(backofficePrefix, boMerchantGetRouter);
 app.use(backofficePrefix, boMerchantListRouter);
 app.use(backofficePrefix, boMerchantUpdateRouter);
 app.use(backofficePrefix, boSupplierCreateRouter);
-app.use(backofficePrefix, boSupplierGetRouter);
 app.use(backofficePrefix, boSupplierListRouter);
 app.use(backofficePrefix, boSupplierUpdateRouter);
 app.use(backofficePrefix, boCategoryListRouter);
 app.use(backofficePrefix, boLocationListRouter);
+app.use(backofficePrefix, boMerchantGetRouter);
+app.use(backofficePrefix, boSupplierGetRouter);
 
 app.all("*", async () => {
   throw new NotFoundError();

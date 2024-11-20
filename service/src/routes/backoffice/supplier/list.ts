@@ -45,6 +45,12 @@ router.get(
     const options: QueryOptions = <QueryOptions>req.query;
     options.sortBy = "updatedAt";
     options.sortDir = -1;
+    options.populates = [
+      { path: "category" },
+      { path: "city" },
+      { path: "district" },
+      { path: "subDistrict" },
+    ];
     const data = await listAndCount(criteria, Supplier, options);
 
     res.status(StatusCodes.OK).send(data);

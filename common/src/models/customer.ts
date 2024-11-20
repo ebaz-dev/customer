@@ -116,6 +116,7 @@ const customerSchema = new Schema<CustomerDoc>(
     discriminatorKey: "type",
     timestamps: true,
     toJSON: {
+      virtuals: true,
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
@@ -148,8 +149,6 @@ customerSchema.virtual("subDistrict", {
   foreignField: "_id",
   justOne: true,
 });
-customerSchema.set("toObject", { virtuals: true });
-customerSchema.set("toJSON", { virtuals: true });
 
 customerSchema.set("versionKey", "version");
 customerSchema.plugin(updateIfCurrentPlugin);
