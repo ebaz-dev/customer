@@ -51,6 +51,7 @@ interface CustomerDoc extends Document {
   cityId?: Types.ObjectId;
   districtId?: Types.ObjectId;
   subDistrictId?: Types.ObjectId;
+  inactive?: boolean;
 }
 
 const customerSchema = new Schema<CustomerDoc>(
@@ -111,6 +112,7 @@ const customerSchema = new Schema<CustomerDoc>(
       required: false,
       ref: "Location",
     },
+    inactive: { type: Boolean, required: false }
   },
   {
     discriminatorKey: "type",
