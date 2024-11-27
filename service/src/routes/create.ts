@@ -14,6 +14,8 @@ import { CustomerCreatedPublisher } from "../events/publisher/customer-created-p
 import { Supplier, SupplierDoc } from "../shared/models/supplier";
 import { Merchant, MerchantDoc } from "../shared/models/merchant";
 import { getCustomerNumber } from "../utils/customer-number-generate";
+import { Employee } from "../shared";
+import { EmployeeRoles } from "../shared/types/employee-roles";
 
 const router = express.Router();
 
@@ -40,12 +42,19 @@ router.post(
       if (data.type === "supplier") {
         data.type = CustomerType.Supplier;
         data.customerNo = await getCustomerNumber(CustomerCode.Supplier);
-        customer = await Supplier.create(<SupplierDoc>data);
+        customer = new Supplier(<SupplierDoc>data);
       } else {
         data.type = CustomerType.Merchant;
         data.customerNo = await getCustomerNumber(CustomerCode.Merchant);
-        customer = await Merchant.create(<MerchantDoc>data);
+        customer = new Merchant(<MerchantDoc>data);
       }
+      await customer.save({ session });
+      const employee = new Employee({
+        userId: req.currentUser?.id,
+        customerId: customer.id,
+        role: EmployeeRoles.Admin,
+      });
+      await employee.save({ session });
       await new CustomerCreatedPublisher(natsWrapper.client).publish(customer);
       await session.commitTransaction();
       res.status(StatusCodes.CREATED).send({ data: customer });

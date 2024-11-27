@@ -4,6 +4,7 @@ import { Customer } from "../shared/models/customer";
 import { StatusCodes } from "http-status-codes";
 import { Types } from "mongoose";
 import _ from "lodash";
+import { Employee } from "../shared";
 
 const router = express.Router();
 
@@ -13,8 +14,12 @@ router.get(
   requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
-    const criteria: any = {
+    const userCustomers = await Employee.find({
       userId: new Types.ObjectId(req.currentUser?.id as string),
+    });
+    const ids = userCustomers.map((customer) => customer.customerId);
+    const criteria: any = {
+      _id: { $in: ids },
       parentId: { $exists: false },
     };
     if (req.query.name) {
@@ -43,6 +48,7 @@ router.get(
     if (req.query.type) {
       criteria.type = req.query.type;
     }
+    console.log("cirteeriaaaa", criteria);
     const parents: any = await Customer.find(criteria).select([
       "-cityId",
       "-districtId",

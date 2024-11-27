@@ -10,6 +10,7 @@ import { Customer } from "../shared/models/customer";
 import { StatusCodes } from "http-status-codes";
 import { query } from "express-validator";
 import mongoose, { Types } from "mongoose";
+import { Employee } from "../shared";
 const router = express.Router();
 
 router.get(
@@ -62,7 +63,11 @@ router.get(
     }
 
     if (req.query.userId) {
-      criteria.userId = req.query.userId;
+      const userCustomers = await Employee.find({
+        userId: new Types.ObjectId(req.query.userId as string),
+      });
+      const ids = userCustomers.map((customer) => customer.customerId);
+      criteria._id = { $in: ids };
     }
 
     if (req.query.type) {

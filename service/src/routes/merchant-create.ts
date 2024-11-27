@@ -9,7 +9,8 @@ import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import { Merchant, MerchantDoc } from "../shared/models/merchant";
 import { getCustomerNumber } from "../utils/customer-number-generate";
-import { CustomerCode } from "../shared";
+import { CustomerCode, Employee } from "../shared";
+import { EmployeeRoles } from "../shared/types/employee-roles";
 
 const router = express.Router();
 
@@ -29,7 +30,14 @@ router.post(
       insertData.businessName = businessData.name;
       insertData.regNo = businessData.regNo;
       insertData.customerNo = await getCustomerNumber(CustomerCode.Merchant);
-      const merchant = await Merchant.create(insertData);
+      const merchant = new Merchant(insertData);
+      await merchant.save({ session });
+      const employee = new Employee({
+        userId: req.currentUser?.id,
+        customerId: merchant.id,
+        role: EmployeeRoles.Admin,
+      });
+      await employee.save({ session });
       await session.commitTransaction();
       res.status(StatusCodes.CREATED).send({
         data: {

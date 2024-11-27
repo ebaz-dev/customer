@@ -11,6 +11,7 @@ import mongoose from "mongoose";
 import {
   CustomerCode,
   CustomerHolding,
+  Employee,
   HoldingSupplierCodes,
   Merchant,
   Supplier,
@@ -18,6 +19,7 @@ import {
 import { SupplierCodeAddedPublisher } from "../events/publisher/supplier-code-added-publisher";
 import { natsWrapper } from "../nats-wrapper";
 import { getCustomerNumber } from "../utils/customer-number-generate";
+import { EmployeeRoles } from "../shared/types/employee-roles";
 
 const router = express.Router();
 
@@ -82,7 +84,7 @@ router.post(
         });
       }
 
-      const merchant = await Merchant.create({
+      const merchant = new Merchant({
         customerNo,
         businessName: customerHolding.tradeShopName,
         name: customerHolding.tradeShopName,
@@ -92,6 +94,13 @@ router.post(
         userId: req.currentUser?.id,
         tradeShops,
       });
+      await merchant.save({ session });
+      const employee = new Employee({
+        userId: req.currentUser?.id,
+        customerId: merchant.id,
+        role: EmployeeRoles.Admin,
+      });
+      await employee.save({ session });
 
       // customerHolding.merchantId = merchant.id;
       // await customerHolding.save();

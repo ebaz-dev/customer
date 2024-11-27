@@ -9,6 +9,7 @@ export * from "./models/merchant";
 export * from "./models/supplier";
 export * from "./models/customer-category";
 export * from "./models/location";
+export * from "./models/employee";
 export * from "./types/holding-supplier-codes";
 export * from "./types/integration-keys";
 export * from "./types/vendor-codes";
