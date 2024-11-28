@@ -3,7 +3,10 @@ import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import { CustomerCategory } from "../shared/models/customer-category";
+import {
+  CustomerCategory,
+  CustomerCategoryDoc,
+} from "../shared/models/customer-category";
 
 const router = express.Router();
 
@@ -22,10 +25,11 @@ router.post(
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      const data = req.body;
-      const category = await CustomerCategory.create(data, { session });
+      const { parentId, name, type } = <CustomerCategoryDoc>req.body;
+      const newCategory = new CustomerCategory({ parentId, name, type });
+      await newCategory.save({ session });
       await session.commitTransaction();
-      res.status(StatusCodes.CREATED).send(category);
+      res.status(StatusCodes.CREATED).send({ data: newCategory });
     } catch (error: any) {
       await session.abortTransaction();
       console.error("Customer category create operation failed", error);

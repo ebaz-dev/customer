@@ -3,10 +3,17 @@ import { BadRequestError, validateRequest } from "@ebazdev/core";
 import { body } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import { CustomerCode, CustomerType, Supplier, SupplierDoc } from "../../../shared";
+import {
+  CustomerCode,
+  CustomerType,
+  Employee,
+  Supplier,
+  SupplierDoc,
+} from "../../../shared";
 import { getCustomerNumber } from "../../../utils/customer-number-generate";
 import { CustomerCreatedPublisher } from "../../../events/publisher/customer-created-publisher";
 import { natsWrapper } from "../../../nats-wrapper";
+import { EmployeeRoles } from "../../../shared/types/employee-roles";
 
 const router = express.Router();
 
@@ -21,7 +28,14 @@ router.post(
       const data = req.body;
       data.type = CustomerType.Supplier;
       data.customerNo = await getCustomerNumber(CustomerCode.Supplier);
-      const customer = await Supplier.create(<SupplierDoc>data);
+      const customer = new Supplier(<SupplierDoc>data);
+      await customer.save({ session });
+      const employee = new Employee({
+        userId: req.currentUser?.id,
+        customerId: customer.id,
+        role: EmployeeRoles.Admin,
+      });
+      await employee.save({ session });
       await new CustomerCreatedPublisher(natsWrapper.client).publish(customer);
       await session.commitTransaction();
       res.status(StatusCodes.CREATED).send({ data: customer });

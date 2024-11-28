@@ -23,7 +23,6 @@ import { customerHoldingCreateRouter } from "./routes/create-bulk-customer-holdi
 import { holdingLoginRouter } from "./routes/holding-login";
 import { holdingSigninRouter } from "./routes/merchant-holding-signin";
 import { holdingListRouter } from "./routes/holding-list";
-import { codeUpdateRouter } from "./routes/customer-code-set";
 import { boMerchantCreateRouter } from "./routes/backoffice/merchant/create";
 import { boMerchantGetRouter } from "./routes/backoffice/merchant/get";
 import { boMerchantListRouter } from "./routes/backoffice/merchant/list";
@@ -34,6 +33,10 @@ import { boSupplierGetRouter } from "./routes/backoffice/supplier/get";
 import { boSupplierUpdateRouter } from "./routes/backoffice/supplier/update";
 import { boCategoryListRouter } from "./routes/backoffice/category/category-list";
 import { boLocationListRouter } from "./routes/backoffice/location/location-list";
+import { employeeAssignRouter } from "./routes/employee/assign";
+import { employeeListRouter } from "./routes/employee/list";
+import { employeeGetRouter } from "./routes/employee/get";
+import { employeeMigrateRouter } from "./routes/employee/migrate";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -75,7 +78,10 @@ app.use(apiPrefix, customerHoldingCreateRouter);
 app.use(apiPrefix, holdingLoginRouter);
 app.use(apiPrefix, holdingSigninRouter);
 app.use(apiPrefix, holdingListRouter);
-app.use(apiPrefix, codeUpdateRouter);
+app.use(apiPrefix, employeeAssignRouter);
+app.use(apiPrefix, employeeListRouter);
+app.use(apiPrefix, employeeMigrateRouter);
+app.use(apiPrefix, employeeGetRouter);
 
 //backoffice
 app.use(backofficePrefix, boMerchantCreateRouter);
