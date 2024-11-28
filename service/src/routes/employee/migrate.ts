@@ -5,7 +5,7 @@ import { Employee } from "../../shared/models/employee";
 import { Customer, Merchant } from "../../shared";
 import _ from "lodash";
 import { EmployeeRoles } from "../../shared/types/employee-roles";
-import { Cart, Order } from "@ebazdev/order";
+import { Cart, Order, OrderTemplate } from "@ebazdev/order";
 import { Types } from "mongoose";
 
 const router = express.Router();
@@ -102,34 +102,23 @@ router.get(
               { $set: { inactive: true } }
             );
 
+            const templateRes = await OrderTemplate.updateOne(
+              { merchantId: customer._id },
+              {
+                $set: {
+                  merchantId: new Types.ObjectId(mainCustomer._id as string),
+                },
+              }
+            );
+
             console.log("orderRes", orderRes);
             console.log("cartRes", cartRes);
             console.log("customerRes", customerRes);
+            console.log("templateRes", templateRes);
           }
         }
       });
     });
-    // const promises = _.map(merchants, async (merchant) => {
-    //   const userId = merchant.userId;
-    //   const customerId = merchant.id;
-    //   if (userId && customerId) {
-    //     const employeeExist = await Employee.find({
-    //       userId,
-    //       customerId,
-    //     });
-    //     if (employeeExist.length < 1) {
-    //       const newEmployee = await Employee.create({
-    //         userId: userId,
-    //         customerId: customerId,
-    //         role: EmployeeRoles.Admin,
-    //       });
-    //       return newEmployee;
-    //     }
-    //     return { migrated: true };
-    //   }
-    //   return { userNotfound: true };
-    // });
-    // const employees = await Promise.all(promises);
 
     res.status(StatusCodes.OK).send({ data });
   }
