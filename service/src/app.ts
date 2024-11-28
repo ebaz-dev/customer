@@ -3,7 +3,7 @@ import "express-async-errors";
 import { json } from "body-parser";
 import { createRouter } from "./routes/create";
 import { updateRouter } from "./routes/update";
-import { currentUser, errorHandler, NotFoundError } from "@ebazdev/core";
+import { accessLogger, currentUser, errorHandler, NotFoundError } from "@ebazdev/core";
 import cookieSession from "cookie-session";
 import * as dotenv from "dotenv";
 import { getRouter } from "./routes/get";
@@ -60,6 +60,8 @@ app.use(
 );
 
 app.use(currentUser);
+app.use(accessLogger("customer"));
+
 app.use(apiPrefix, createRouter);
 app.use(apiPrefix, updateRouter);
 app.use(apiPrefix, getRouter);
