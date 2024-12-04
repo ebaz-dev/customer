@@ -37,6 +37,7 @@ import { employeeAssignRouter } from "./routes/employee/assign";
 import { employeeListRouter } from "./routes/employee/list";
 import { employeeGetRouter } from "./routes/employee/get";
 import { employeeMigrateRouter } from "./routes/employee/migrate";
+import { holdingSigninDataRouter } from "./routes/merchant-holding-data";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -79,6 +80,7 @@ app.use(apiPrefix, merchantConfirmByHolding);
 app.use(apiPrefix, customerHoldingCreateRouter);
 app.use(apiPrefix, holdingLoginRouter);
 app.use(apiPrefix, holdingSigninRouter);
+app.use(apiPrefix, holdingSigninDataRouter);
 app.use(apiPrefix, holdingListRouter);
 app.use(apiPrefix, employeeAssignRouter);
 app.use(apiPrefix, employeeListRouter);
