@@ -3,7 +3,7 @@ import "express-async-errors";
 import { json } from "body-parser";
 import { createRouter } from "./routes/create";
 import { updateRouter } from "./routes/update";
-import { currentUser, errorHandler, NotFoundError } from "@ebazdev/core";
+import { accessLogger, currentUser, errorHandler, NotFoundError } from "@ebazdev/core";
 import cookieSession from "cookie-session";
 import * as dotenv from "dotenv";
 import { getRouter } from "./routes/get";
@@ -37,6 +37,7 @@ import { employeeAssignRouter } from "./routes/employee/assign";
 import { employeeListRouter } from "./routes/employee/list";
 import { employeeGetRouter } from "./routes/employee/get";
 import { employeeMigrateRouter } from "./routes/employee/migrate";
+import { holdingSigninDataRouter } from "./routes/merchant-holding-data";
 dotenv.config();
 
 const apiPrefix = "/api/v1/customer";
@@ -60,6 +61,8 @@ app.use(
 );
 
 app.use(currentUser);
+app.use(accessLogger("customer"));
+
 app.use(apiPrefix, createRouter);
 app.use(apiPrefix, updateRouter);
 app.use(apiPrefix, getRouter);
@@ -77,6 +80,7 @@ app.use(apiPrefix, merchantConfirmByHolding);
 app.use(apiPrefix, customerHoldingCreateRouter);
 app.use(apiPrefix, holdingLoginRouter);
 app.use(apiPrefix, holdingSigninRouter);
+app.use(apiPrefix, holdingSigninDataRouter);
 app.use(apiPrefix, holdingListRouter);
 app.use(apiPrefix, employeeAssignRouter);
 app.use(apiPrefix, employeeListRouter);

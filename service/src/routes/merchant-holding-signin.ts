@@ -82,6 +82,24 @@ router.post(
           holdingKey: HoldingSupplierCodes.AnunGoo,
           tsId: customerHolding.tradeShopId,
         });
+
+        tradeShops.push({
+          holdingKey: HoldingSupplierCodes.MarketGate,
+          tsId: customerHolding.tradeShopId,
+        });
+      }
+
+      if (supplier.holdingKey === HoldingSupplierCodes.AnunGoo) {
+        tradeShops.push({
+          holdingKey: HoldingSupplierCodes.MarketGate,
+          tsId: customerHolding.tradeShopId,
+        });
+      }
+      if (supplier.holdingKey === HoldingSupplierCodes.MarketGate) {
+        tradeShops.push({
+          holdingKey: HoldingSupplierCodes.AnunGoo,
+          tsId: customerHolding.tradeShopId,
+        });
       }
 
       const merchant = new Merchant({

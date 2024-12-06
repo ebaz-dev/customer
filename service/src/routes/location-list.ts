@@ -10,7 +10,7 @@ router.get(
   validateRequest,
   async (req: Request, res: Response) => {
     const criteria: any = {};
-    const data = await Location.find(criteria);
+    const data = await Location.find(criteria).sort("name");
     const cities: any = data
       .filter((location) => {
         return !location.parentId;

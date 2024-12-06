@@ -4,4 +4,5 @@ export enum HoldingSupplierCodes {
   EBazaar = "EBAZAAR",
   TotalDistribution = "TD",
   AnunGoo = "AG",
+  MarketGate="MG"
 }
