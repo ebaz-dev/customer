@@ -21,9 +21,24 @@ router.get(
             return `${district.parentId}` === `${city._id}`;
           })
           .map((district: any) => {
-            const subDistricts = data.filter((subDistrict) => {
-              return `${subDistrict.parentId}` === `${district._id}`;
-            });
+            const subDistricts = data
+              .filter((subDistrict) => {
+                return `${subDistrict.parentId}` === `${district._id}`;
+              })
+              .sort((a, b) => {
+                const regex = /^(\d+)/;
+                const aMatch = a.name.match(regex);
+                const bMatch = b.name.match(regex);
+                if (aMatch && bMatch) {
+                  return parseInt(aMatch[1]) - parseInt(bMatch[1]);
+                } else if (aMatch) {
+                  return 1;
+                } else if (bMatch) {
+                  return -1;
+                } else {
+                  return a.name.localeCompare(b.name);
+                }
+              });
             return {
               id: district._id,
               parentId: district.parentId,
